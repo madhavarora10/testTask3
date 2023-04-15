@@ -16,24 +16,21 @@ function Form() {
     const [entity, setentity] = useState()
     const [city, setcity] = React.useState('');
     const [userdata, setdata] = React.useState('');
-    const [able, setDisable] = React.useState();
+    const [val, setval] = React.useState();
 
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
     const code = watch('pinCode');
 
     const onsubmit = ((data) => {
-      Object.assign(data,{'city':able})
+      Object.assign(data,{'city':city.id})
       setshow(true)
       setdata(data)
-       console.log(data)
+      
     });
 
     const handleChange = (event) => {
-
-        setcity(event.target.value);
-       
+        setcity(event.target.value); 
     };
-
 
     const checkCode = (() => {
         if (code?.length > 5)
@@ -42,11 +39,11 @@ function Form() {
 
 
     const setCode = (() => {
-        data.map((el) => {
-            if (el.postcode === entity)
-                setDisable(el.city)
-                
+     const shops= data.map((el) => {
+            if (el.postcode === entity)       
+                return el
         })
+         setval(shops)
     })
 
     useEffect(() => {
@@ -71,14 +68,17 @@ function Form() {
 
                 <Box sx={{ minWidth: 120 }}>
                     <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-disabled-label">city</InputLabel>
+                        <InputLabel id="demo-simple-select-disabled-label">Shops</InputLabel>
                         <Select
                             labelId="demo-simple-select-disabled-label"
                             id="demo-simple-select-disabled"
                             label="city"
+                            value={city}
                             onChange={handleChange}
                         >
-                            <MenuItem value={able}>{able}</MenuItem>
+                            {val?.map((el,index)=>(
+                                el && <MenuItem value={el} key={index} >{el.shop}</MenuItem>
+                            ))}
 
 
                         </Select>
